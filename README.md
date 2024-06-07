@@ -31,7 +31,7 @@ apiKey := "INPUT_YOU_YOUTUBE_DATA_API_V3_KEY"
 
 In order to launch our project, we need to specify the video ID of the video on YouTube
 
-Example: We have a link https://www.youtube.com/watch?v=`446E-r0rXHI` and the video ID of our video will be `446E-r0rXHI`
+Example: We have a link https://www.youtube.com/watch?v=446E-r0rXHI and the video ID of our video will be `446E-r0rXHI`
 
 ```bash
 $ go run main.go 446E-r0rXHI
