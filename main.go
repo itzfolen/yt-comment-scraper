@@ -1,38 +1,67 @@
 package main
 
 import (
+	"encoding/csv"
 	"fmt"
-	"github.com/gocolly/colly/v2"
+	"log"
 	"os"
+
+	"google.golang.org/api/option"
+	"google.golang.org/api/youtube/v3"
 )
 
-type Dictionary map[string]string
-
-type RecipeSpecs struct {
-	difficulty, prepTime, cookingTime, servingSize, priceTier string
-}
-
-type Recipe struct {
-	url, name      string
-	ingredients    []Dictionary
-	specifications RecipeSpecs
-}
-
 func main() {
-	args := os.Args
-	url := args[1]
-	collector := colly.NewCollector()
+	if len(os.Args) < 2 {
+		log.Fatalf("Usage: %s <videoID>", os.Args[0])
+	}
 
-	collector.OnRequest(func(r *colly.Request) {
-		fmt.Println("Visiting", r.URL)
-	})
-	collector.OnResponse(func(r *colly.Response) {
-		fmt.Println("Got a response from", r.Request.URL)
-	})
-	collector.OnError(func(r *colly.Response, e error) {
-		fmt.Println("Blimey, an error occurred!:", e)
-	})
+	videoID := os.Args[1]
+	apiKey := "AIzaSyCDrrIyOHM34QDjxAnGX3DE86gafeLRwTY"
+	outputFileName := "comments.csv"
 
-	collector.Visit(url)
+	file, err := os.Create(outputFileName)
+	if err != nil {
+		log.Fatalf("Could not create file: %s", err)
+	}
+	defer file.Close()
 
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+
+	writer.Write([]string{"Nick", "Time", "Comment", "Likes"})
+
+	service, err := youtube.NewService(nil, option.WithAPIKey(apiKey))
+	if err != nil {
+		log.Fatalf("Error creating YouTube client: %v", err)
+	}
+
+	var nextPageToken string
+
+	for {
+		call := service.CommentThreads.List([]string{"snippet"}).VideoId(videoID).TextFormat("plainText").PageToken(nextPageToken)
+		response, err := call.Do()
+		if err != nil {
+			log.Fatalf("Error fetching comments: %v", err)
+		}
+
+		for _, item := range response.Items {
+			snippet := item.Snippet.TopLevelComment.Snippet
+			nick := snippet.AuthorDisplayName
+			time := snippet.PublishedAt
+			comment := snippet.TextDisplay
+			likes := fmt.Sprintf("%d", snippet.LikeCount)
+
+			fmt.Printf("Nick: %s\nTime: %s\nComment: %s\nLikes: %s\n\n", nick, time, comment, likes)
+
+			writer.Write([]string{nick, time, comment, likes})
+		}
+
+		if response.NextPageToken == "" {
+			break
+		}
+
+		nextPageToken = response.NextPageToken
+	}
+
+	fmt.Printf("Comments have been saved to %s\n", outputFileName)
 }
