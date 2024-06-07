@@ -16,7 +16,7 @@ func main() {
 	}
 
 	videoID := os.Args[1]
-	apiKey := "AIzaSyCDrrIyOHM34QDjxAnGX3DE86gafeLRwTY"
+	apiKey := "INPUT_YOU_YOUTUBE_DATA_API_V3_KEY"
 	outputFileName := "comments.csv"
 
 	file, err := os.Create(outputFileName)
