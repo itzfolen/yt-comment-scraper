@@ -4,6 +4,8 @@ With this tool you will be able to easily download all public comments from YouT
 
 ## Installation
 
+Install the [Golang](https://go.dev/dl/) compiler for your platform
+
 Clone the project
 
 ```bash
