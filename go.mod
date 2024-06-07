@@ -1,4 +1,4 @@
-module web-scraper
+module yt-comment-scraper
 
 go 1.22
 

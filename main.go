@@ -6,6 +6,18 @@ import (
 	"os"
 )
 
+type Dictionary map[string]string
+
+type RecipeSpecs struct {
+	difficulty, prepTime, cookingTime, servingSize, priceTier string
+}
+
+type Recipe struct {
+	url, name      string
+	ingredients    []Dictionary
+	specifications RecipeSpecs
+}
+
 func main() {
 	args := os.Args
 	url := args[1]
@@ -20,5 +32,7 @@ func main() {
 	collector.OnError(func(r *colly.Response, e error) {
 		fmt.Println("Blimey, an error occurred!:", e)
 	})
+
 	collector.Visit(url)
+
 }
