@@ -1,4 +1,4 @@
-# Simple Golang CLI utility for scraping youtube comment
+# Simple Golang CLI utility for scraping YouTube comment
 
 With this tool you will be able to easily download all public comments from YouTube
 
