@@ -9,14 +9,16 @@ Install the [Golang](https://go.dev/dl/) compiler for your platform
 Clone the project
 
 ```bash
-$ git clone https://github.com/itzfolen/yt-comment-scraper.git
-$ cd yt-comment-scraper
+git clone https://github.com/itzfolen/yt-comment-scraper.git
+```
+```bash
+cd yt-comment-scraper
 ```
 
 Install the necessary Golang libraries
 
 ```bash
-$ go get google.golang.org/api/option google.golang.org/api/youtube/v3
+go get google.golang.org/api/option google.golang.org/api/youtube/v3
 ```
 
 ## Preparing for run
